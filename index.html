@@ -19,51 +19,63 @@
 
 <h1>🔒 私隱政策</h1>
 <p><strong>香港大人說明書 (HKAdultManual)</strong></p>
-<p class="last-updated">最後更新日期：2026年6月25日</p>
+<p class="last-updated">最後更新日期：2026年7月15日</p>
 
 <h2>1. 簡介</h2>
 <p>「香港大人說明書」（下稱「本App」）重視用戶嘅私隱。本私隱政策說明本App如何處理用戶資料。</p>
 <p>本App由 Sunny Lai 開發及營運。如有任何私隱相關疑問，請電郵至 <a href="mailto:sunnyyylai@icloud.com">sunnyyylai@icloud.com</a>。</p>
 
-<h2>2. 資料收集</h2>
-<p><strong>本App不收集任何個人資料。</strong>本App：</p>
+<h2>2. 我們處理的資料</h2>
+<p>本App使用 Firebase 匿名登入提供社群、個人資料及投稿功能。用戶毋須提供電郵、電話或真實姓名，但系統會建立一個隨機 Firebase 用戶識別碼。</p>
 <ul>
-  <li>❌ 不要求用戶註冊或登入帳戶</li>
-  <li>❌ 不收集姓名、電郵、電話號碼或任何個人身份資訊</li>
-  <li>❌ 不使用任何分析工具（Analytics）或追蹤器</li>
-  <li>❌ 不顯示任何第三方廣告</li>
-  <li>❌ 不連接任何遠端伺服器或API</li>
-  <li>❌ 不存取用戶位置、相機、麥克風、聯絡人或其他裝置權限</li>
+  <li><strong>帳戶識別資料</strong>：隨機 Firebase 用戶識別碼、帳戶角色及驗證狀態。</li>
+  <li><strong>用戶提供的個人資料</strong>：顯示名稱、簡介及所選頭像圖案／顏色。請勿使用真實姓名或在簡介公開敏感資料。</li>
+  <li><strong>用戶內容</strong>：社群貼文、留言、反應、舉報、寫手申請、文章草稿以外的投稿內容及審核紀錄。</li>
+  <li><strong>訂閱狀態</strong>：本App透過 Apple StoreKit 判斷高級大人訂閱權限；我們不接收完整付款卡資料。</li>
 </ul>
-<p>本App係一個完全離線運作嘅內容型App，所有文章內容均預載於App內。</p>
+<p>本App目前不使用第三方廣告、不進行跨App追蹤，亦沒有啟用 Firebase Analytics。除非日後另行說明及取得所需同意，我們不會出售用戶資料。</p>
 
 <h2>3. 本機資料儲存</h2>
-<p>本App僅使用 iOS 系統提供嘅 <strong>UserDefaults</strong> 機制，喺用戶裝置本機儲存以下資料：</p>
+<p>本App使用 iOS 本機儲存保存以下資料：</p>
 <ul>
   <li>📎 <strong>書籤紀錄</strong>：用戶收藏嘅文章ID列表，方便離線查閱</li>
   <li>🎨 <strong>外觀偏好</strong>：用戶選擇嘅深色/淺色模式設定</li>
+  <li>📝 <strong>未提交草稿</strong>：文章草稿只保存在目前裝置，提交前不會上傳</li>
+  <li>🛡️ <strong>社群偏好</strong>：已接受守則、已封鎖用戶及反應去重紀錄</li>
 </ul>
-<p>以上所有資料<strong>僅儲存於用戶裝置內</strong>，本App開發者無法存取、查看或以任何方式收集呢啲資料。用戶刪除App後，相關資料將一併被清除。</p>
+<p>刪除App通常會同時移除上述本機資料；已上傳到 Firebase 的內容須使用App內「刪除帳戶及所有資料」功能刪除。</p>
 
 <h2>4. 第三方服務</h2>
-<p>本App<strong>不使用任何第三方服務</strong>，包括但不限於：</p>
+<p>本App使用以下服務提供核心功能：</p>
 <ul>
-  <li>第三方分析工具（如 Google Analytics、Firebase）</li>
-  <li>廣告網絡（如 AdMob）</li>
-  <li>社交媒體SDK</li>
-  <li>雲端同步服務</li>
+  <li><strong>Google Firebase Authentication</strong>：建立及管理匿名訪客身份。</li>
+  <li><strong>Google Cloud Firestore</strong>：同步社群、個人資料、寫手申請、投稿及已刊文章。</li>
+  <li><strong>Apple StoreKit／App Store</strong>：處理訂閱購買、恢復購買及權限驗證。</li>
+</ul>
+<p>第三方服務可能按其服務運作需要處理裝置、網絡及診斷資料。詳情請參閱 <a href="https://firebase.google.com/support/privacy">Firebase 私隱與安全資料</a>及 <a href="https://www.apple.com/legal/privacy/">Apple 私隱政策</a>。</p>
+
+<h2>5. 資料用途</h2>
+<ul>
+  <li>提供社群發帖、留言、封鎖、舉報及內容審核功能</li>
+  <li>保存個人顯示設定、寫手申請、投稿及審核狀態</li>
+  <li>刊登獲批准的高級大人文章及顯示作者署名</li>
+  <li>驗證訂閱權限、防止濫用、維持服務安全及處理用戶支援</li>
 </ul>
 
-<h2>5. 兒童私隱</h2>
-<p>本App不收集任何用戶資料（包括兒童），因此符合各司法管轄區的兒童私隱保護法規要求。</p>
+<h2>6. 保存及刪除</h2>
+<p>雲端資料會保存至提供相關功能所需的期間。用戶可在「我的 → 資料與帳戶 → 刪除帳戶及所有資料」永久刪除其 Firebase 身份、個人資料、社群內容、留言、投稿、已刊文章、寫手申請及舉報資料。操作不能還原。</p>
+<p>Apple 管理的購買及訂閱紀錄受 Apple 的保存政策規管，並不會因刪除本App帳戶而從 Apple 帳戶移除。</p>
 
-<h2>6. 免責聲明</h2>
+<h2>7. 兒童私隱</h2>
+<p>本App以成年人生活資訊為主要內容，並非專為兒童設計。我們不會刻意要求兒童提供真實姓名、電郵或電話。如家長或監護人認為兒童提交了不適當資料，請聯絡我們處理。</p>
+
+<h2>8. 免責聲明</h2>
 <p>本App提供嘅內容（包括但不限於住屋、理財、醫療、法律等資訊）僅供參考用途，不構成專業意見。用戶如有具體問題，應諮詢相關專業人士。</p>
 
-<h2>7. 政策變更</h2>
+<h2>9. 政策變更</h2>
 <p>本私隱政策可能會不時更新。更新後嘅政策將於本頁面公布，並即時生效。建議用戶定期查閱本頁面以了解最新版本。</p>
 
-<h2>8. 聯絡我們</h2>
+<h2>10. 聯絡我們</h2>
 <p>如對本私隱政策有任何疑問或建議，請透過以下方式聯絡：</p>
 <ul>
   <li>📧 電郵：<a href="mailto:sunnyyylai@icloud.com">sunnyyylai@icloud.com</a></li>
