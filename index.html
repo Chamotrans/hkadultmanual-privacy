@@ -19,7 +19,7 @@
 
 <h1>🔒 私隱政策</h1>
 <p><strong>香港大人說明書 (HKAdultManual)</strong></p>
-<p class="last-updated">最後更新日期：2026年7月22日</p>
+<p class="last-updated">最後更新日期：2026年7月28日</p>
 
 <h2>1. 簡介</h2>
 <p>「香港大人說明書」（下稱「本App」）重視用戶嘅私隱。本私隱政策說明本App如何處理用戶資料。</p>
@@ -31,8 +31,10 @@
   <li><strong>帳戶識別資料</strong>：隨機 Firebase 用戶識別碼、帳戶角色及驗證狀態。</li>
   <li><strong>用戶提供的個人資料</strong>：顯示名稱、簡介及所選頭像圖案／顏色。請勿使用真實姓名或在簡介公開敏感資料。</li>
   <li><strong>用戶內容（UGC）</strong>：社群貼文、留言、反應、舉報、讀者點題、寫手申請、文章草稿以外的投稿內容及審核紀錄。</li>
+  <li><strong>用戶選取的相片／影片類別資料</strong>：當用戶主動在社群貼文、留言、對話、讀者點題或投稿功能選取並提交媒體時，本App會處理該等媒體。本版本的上載介面只接受相片；JPG、PNG 或 HEIC 相片會在裝置上轉換及壓縮成 JPEG 後上載。本App目前不支援影片上載，亦不會掃描或上載用戶未選取的相片或影片。</li>
   <li><strong>訂閱狀態</strong>：本App透過 Apple StoreKit 判斷高級大人訂閱權限；我們不接收完整付款卡資料。</li>
 </ul>
+<p>用戶提交的相片會儲存於 Google Firebase Storage。檔案會按隨機 Firebase 用戶識別碼、UGC 類型及相關內容識別碼組織，因此會與該 Firebase 身份及相關內容連結；我們只會為提供相關 UGC 上載、顯示、編輯及管理功能而處理這些相片。</p>
 <p>本App目前不使用第三方廣告、不進行跨App追蹤，亦沒有啟用 Firebase Analytics。除非日後另行說明及取得所需同意，我們不會出售用戶資料。</p>
 
 <h2>3. 本機資料儲存</h2>
@@ -50,6 +52,7 @@
 <ul>
   <li><strong>Google Firebase Authentication</strong>：建立及管理匿名訪客身份。</li>
   <li><strong>Google Cloud Firestore</strong>：同步社群、個人資料、寫手申請、投稿及已刊文章。</li>
+  <li><strong>Google Firebase Storage</strong>：接收、處理及儲存用戶主動選取並提交的 UGC 相片，並按 Firebase 用戶識別碼及相關內容組織檔案。</li>
   <li><strong>Apple StoreKit／App Store</strong>：處理訂閱購買、恢復購買及權限驗證。</li>
 </ul>
 <p>第三方服務可能按其服務運作需要處理裝置、網絡及診斷資料。詳情請參閱 <a href="https://firebase.google.com/support/privacy">Firebase 私隱與安全資料</a>及 <a href="https://www.apple.com/legal/privacy/">Apple 私隱政策</a>。</p>
@@ -58,6 +61,7 @@
 <ul>
   <li>提供社群發帖、留言、封鎖、舉報及內容審核功能</li>
   <li>保存個人顯示設定、寫手申請、投稿及審核狀態</li>
+  <li>壓縮、儲存、下載及顯示用戶主動選取並上載到相關 UGC 的相片</li>
   <li>刊登獲批准的高級大人文章及顯示作者署名</li>
   <li>驗證訂閱權限、防止濫用、維持服務安全及處理用戶支援</li>
 </ul>
@@ -69,6 +73,7 @@
 
 <h2>7. 保存及刪除</h2>
 <p>雲端資料會保存至提供相關功能所需的期間。用戶可在「我的 → 資料與帳戶 → 刪除帳戶及所有資料」永久刪除其 Firebase 身份、個人資料、社群內容、留言、投稿、已刊文章、寫手申請及舉報資料。操作不能還原。</p>
+<p>上載至 Firebase Storage 的 UGC 相片一般會保留至用戶移除該相片、刪除相關內容或使用「刪除帳戶及所有資料」功能；完成相關操作時，本App會向 Firebase Storage 發出刪除要求。</p>
 <p>刪除後，為防止濫用、履行法律責任、處理爭議或維持備份完整性所需的有限紀錄，可能在合理期間內保留；其他用戶已合法取得的副本、分享或截圖亦未必可由我們控制或刪除。</p>
 <p>Apple 管理的購買及訂閱紀錄受 Apple 的保存政策規管，並不會因刪除本App帳戶而從 Apple 帳戶移除。</p>
 
