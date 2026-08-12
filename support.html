@@ -20,11 +20,11 @@
 
 <h1>🙋 支援中心</h1>
 <p><strong>香港大人說明書 (HKAdultManual)</strong></p>
-<p class="last-updated">最後更新日期：2026-08-10</p>
+<p class="last-updated">最後更新日期：2026-08-12</p>
 
 <div class="card">
   <p><strong>需要協助？</strong></p>
-  <p>請電郵至 <a href="mailto:sunnyyylai@icloud.com?subject=HKAdultManual%20支援">sunnyyylai@icloud.com</a>。請附上問題描述、iPhone 型號、iOS 版本及相關截圖；請勿傳送密碼、付款卡資料或其他敏感資料。</p>
+  <p>請電郵至 <a href="mailto:sunnyyylai@icloud.com?subject=HKAdultManual%20支援">sunnyyylai@icloud.com</a>。請附上問題描述、使用 iOS App 或 PWA、裝置／瀏覽器版本及相關截圖；請勿傳送密碼、付款卡資料或其他敏感資料。</p>
 </div>
 
 <h2>內容類別</h2>
@@ -33,20 +33,32 @@
   <li><strong>大學問</strong>：基於多重來源的個人成長內容。</li>
 </ul>
 
-<h2>訂閱及恢復購買</h2>
+<h2>PWA 安裝及登入</h2>
+<ol>
+  <li>以支援 PWA 的瀏覽器開啟網站；如瀏覽器顯示「安裝」或「加入主畫面」，按指示完成。</li>
+  <li>純閱讀毋須登入。首次儲存、發帖、留言、提問、回答、舉報、上載相片或解鎖內容時，系統會建立匿名 UID。</li>
+  <li>要在同一身份上保留資料，可在帳戶頁用 Email Link 升級；升級保留現有 UID，但不會把兩個既有帳戶自動合併。</li>
+</ol>
+<p>PWA 草稿只保存在該瀏覽器的 IndexedDB；清除瀏覽器網站資料或使用另一部裝置前，請先完成或另行備份草稿。</p>
+
+<h2>iOS App 訂閱及恢復購買</h2>
 <ol>
   <li>在App內打開「高級大人會員」頁面。</li>
   <li>選擇月費或年費方案，或點按「恢復購買」。</li>
   <li>如需取消或管理訂閱，請前往 iPhone「設定」→ Apple 帳戶 →「訂閱項目」。</li>
 </ol>
-<p>付款、續期及退款由 Apple App Store 處理。刪除App或App內帳戶不會自動取消 Apple 訂閱。</p>
+<p>付款、續期及退款由 Apple App Store 處理。刪除 App 或 App 內帳戶不會自動取消 Apple 訂閱。香港 iOS App 不提供 Web 購買連結或 CTA。</p>
+
+<h2>Web 訂閱（目前未啟用）</h2>
+<p>Web checkout 目前保持關閉，因香港 Stripe 商戶設定及四項伺服器端 secrets 尚未完成；現時不可在 PWA 購買，Apple Pay 亦未有提供。日後啟用後，Web 月費為 HKD 28、年費為 HKD 198。Stripe Checkout／Billing Portal 可在支援的裝置和瀏覽器提供 Apple Pay 等可用付款方式；請只在 PWA 的「會員及付款」管理 Web 訂閱。</p>
+<p>日後正常在 Stripe Billing Portal 取消，會停止續期而保留至已付款期結束。刪除有有效 Web 訂閱的帳戶則會即時取消並刪除 Stripe 客戶資料，不會自動退款。Web 訂閱與 Apple App Store 訂閱分開管理；現有 iOS 匿名 UID 不會自動連結至首次 Web checkout。</p>
 
 <h2>社群內容、舉報及封鎖</h2>
 <p>如發現不當貼文或留言，可在內容選單選擇「舉報」或「封鎖用戶」。我們會按社群守則及適用法例審核。緊急或危及人身安全的情況，請直接聯絡相關緊急服務。</p>
-<p>如你的社群發佈權限被停用並希望提出覆核，請電郵聯絡我們，並提供 App 內顯示的用戶 UID；停用期間仍可刪除自己的內容或整個帳戶。</p>
+<p>如你的社群發佈權限被停用並希望提出覆核，請電郵聯絡我們，並提供 iOS App 或 PWA 顯示的用戶 UID；停用期間仍可刪除自己的內容或整個帳戶。被隱藏或隔離的內容不會公開顯示，會按社群守則處理。</p>
 
 <h2>刪除帳戶及資料</h2>
-<p>在App內前往「我的」→「資料與帳戶」→「刪除帳戶及所有資料」，即可永久刪除 Firebase 身份及相關雲端資料。操作不能還原；Apple 管理的訂閱及購買紀錄不會一併刪除。</p>
+<p>在 iOS App「我的」→「資料與帳戶」或 PWA「設定」→「刪除帳戶及資料」，即可永久刪除 Firebase 身份及相關雲端資料。操作不能還原；Apple 管理的訂閱及購買紀錄不會一併刪除。若日後有有效 Web 訂閱，刪帳會先即時取消並刪除 Stripe 客戶資料，並不自動退款。</p>
 
 <h2>資料及專業意見提示</h2>
 <p>本App內容只作一般資訊及教育用途，不構成法律、醫療、稅務、會計、財務、投資、保險或其他專業意見。作出重要決定前，請核對官方最新資料並諮詢具資格專業人士。</p>
