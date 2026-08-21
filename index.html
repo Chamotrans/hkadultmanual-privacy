@@ -19,7 +19,7 @@
 
 <h1>🔒 私隱政策</h1>
 <p><strong>香港大人說明書 (HKAdultManual)</strong></p>
-<p class="last-updated">最後更新日期：2026-08-20</p>
+<p class="last-updated">最後更新日期：2026-08-22</p>
 
 <h2>1. 簡介</h2>
 <p>「香港大人說明書」（下稱「本服務」）包括 iOS App、公開網站及可安裝的 PWA（網頁 App）。本私隱政策說明本服務如何處理用戶資料。</p>
@@ -27,9 +27,9 @@
 <p>本App由 Sunny Lai 開發及營運。如有任何私隱相關疑問，請電郵至 <a href="mailto:sunnyyylai@icloud.com">sunnyyylai@icloud.com</a>。</p>
 
 <h2>2. 我們處理的資料</h2>
-<p>公開閱讀毋須提供電郵、電話或真實姓名。當你收藏、發帖、留言、提問、回答、舉報、上載相片或解鎖受保護內容時，服務會先建立一個隨機 Firebase 用戶識別碼（UID）。PWA 可讓你用 Email Link 把現有匿名身份升級為電郵帳戶，升級會保留原有 UID；我們不會把兩個既有 UID 自動合併。</p>
+<p>公開閱讀、在目前裝置收藏文章及使用每日免費閱讀額，毋須提供電郵、電話或真實姓名；服務可先建立一個隨機 Firebase 用戶識別碼（UID），把相關紀錄與目前訪客身份連結。發帖、留言、提問、回答、使用聊天室、舉報或上載相片／錄音等公開互動，必須先註冊帳戶並完成電郵驗證。PWA 可讓你用 Email Link 把現有訪客身份升級為電郵帳戶，升級會保留原有 UID；我們不會把兩個既有 UID 自動合併。</p>
 <ul>
-  <li><strong>帳戶識別資料</strong>：隨機 Firebase UID、帳戶角色、驗證狀態、已驗證電郵（如你選擇升級），以及因違反社群守則而設定的社群停用狀態。</li>
+  <li><strong>帳戶識別資料</strong>：隨機 Firebase UID、帳戶角色、驗證狀態、已驗證電郵（當你註冊或升級帳戶），以及因違反社群守則而設定的社群停用狀態。</li>
   <li><strong>用戶提供的個人資料</strong>：顯示名稱、簡介及所選頭像圖案／顏色。請勿使用真實姓名或在簡介公開敏感資料。</li>
   <li><strong>用戶內容（UGC）</strong>：社群貼文、留言、聊天室文字及語音訊息、反應、舉報、讀者點題、寫手申請、文章草稿以外的投稿內容及審核紀錄。</li>
   <li><strong>用戶選取的相片／影片類別資料</strong>：當用戶主動在社群貼文、留言、對話、讀者點題或投稿功能選取並提交媒體時，本App會處理該等媒體。本版本的上載介面只接受相片；JPG、PNG 或 HEIC 相片會在裝置上轉換及壓縮成 JPEG 後上載。本App目前不支援影片上載，亦不會掃描或上載用戶未選取的相片或影片。</li>
@@ -38,7 +38,7 @@
   <li><strong>「大學問」文章浮水印</strong>：閱讀「大學問」文章時，本App會在裝置上顯示由遮罩後的 Firebase 用戶識別碼、文章 ID 及香港時間組成的浮水印，用於阻嚇未經授權分享。本App不會因而上載或儲存閱讀畫面的截圖。</li>
 </ul>
 <p>用戶提交的相片及聊天室錄音會儲存於 Google Firebase Storage。檔案會按隨機 Firebase 用戶識別碼、UGC 類型及相關內容識別碼組織，因此會與該 Firebase 身份及相關內容連結；我們只會為提供相關 UGC 上載、顯示或播放、編輯、刪除及管理功能而處理這些媒體。</p>
-<p>本App目前不使用第三方廣告、不進行跨App追蹤，亦沒有啟用 Firebase Analytics。除非日後另行說明及取得所需同意，我們不會出售用戶資料。</p>
+<p>本App目前不使用第三方廣告、不進行跨App追蹤，亦不會出售用戶資料。iOS App 使用 Firebase Analytics 記錄有限、預先限定的產品互動事件及非用於追蹤的裝置／App 實例、效能資料，例如曾開啟會員頁或開始訂閱流程；事件參數只限一般類別、來源或類型，不包含貼文、訊息、電郵、Firebase UID 或通知權杖。iOS App 亦使用 Firebase Crashlytics 處理當機報告、堆疊追蹤、裝置／作業系統資料及與當機相關的 App 狀態，用於找出錯誤及改善穩定性。</p>
 
 <h2>3. 本機資料儲存</h2>
 <p>本服務在 iOS 裝置及 PWA 瀏覽器使用本機儲存保存以下資料：</p>
@@ -58,6 +58,7 @@
   <li><strong>Google Firebase Authentication</strong>：建立及管理匿名訪客身份。</li>
   <li><strong>Google Cloud Firestore／Cloud Functions</strong>：同步社群、個人資料、寫手申請、投稿及已刊文章；在伺服器核實訂閱、管理每日免費文章額度，並按權限提供「大學問」文章正文。</li>
   <li><strong>Google Firebase Storage</strong>：接收、處理及儲存用戶主動選取並提交的 UGC 相片及聊天室錄音，並按 Firebase 用戶識別碼及相關內容組織檔案。</li>
+  <li><strong>Google Firebase Analytics／Crashlytics</strong>：處理有限的產品互動、非追蹤用途的裝置／App 實例與效能資料，以及當機報告及相關診斷資料，用於分析功能使用情況、偵測錯誤及改善 App 穩定性。</li>
   <li><strong>Apple StoreKit／App Store</strong>：處理訂閱購買、恢復購買及提供由 Apple 簽署的交易資料作權限驗證。</li>
   <li><strong>Stripe（僅在日後啟用 Web 訂閱時）</strong>：處理 PWA 的 Checkout、付款及 Billing Portal。Web checkout 目前保持關閉，因香港商戶設定及所需的四項伺服器端 Stripe secrets 尚未完成。</li>
 </ul>
@@ -71,6 +72,7 @@
   <li>錄製、儲存、下載及播放用戶主動建立並送出的聊天室語音訊息</li>
   <li>刊登獲批准的「大學問」文章及顯示作者署名</li>
   <li>驗證訂閱權限、防止濫用、維持服務安全及處理用戶支援</li>
+  <li>分析有限的產品互動、診斷當機及改善 App 效能與穩定性</li>
   <li>在 Web 訂閱啟用後，以 Firebase 的伺服器端 ledger 保存 Stripe 客戶對應、訂閱權益及事件收據，供核實付款及處理帳戶刪除</li>
 </ul>
 
