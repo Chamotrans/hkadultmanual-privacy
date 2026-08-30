@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="香港大人說明書 Android Alpha 測試版下載及安裝說明">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<link rel="icon" href="android-alpha-icon.svg" type="image/svg+xml">
 <title>香港大人說明書 — Android Alpha</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -17,14 +19,42 @@
   .download { display: inline-block; background: #C62828; color: white; font-weight: 700; text-decoration: none; border-radius: 10px; padding: 11px 18px; }
   .meta { color: #888; font-size: 0.85em; overflow-wrap: anywhere; }
   .warning { border-left: 4px solid #D4AF37; }
+  .gate { min-height: 80vh; display: grid; place-items: center; }
+  .gate .card { width: 100%; }
+  label { display: block; margin: 18px 0 6px; color: #ddd; font-weight: 700; }
+  input { width: 100%; border: 1px solid #555; border-radius: 10px; background: #0f0f0f; color: white; font: inherit; padding: 12px 14px; }
+  button { margin-top: 14px; border: 0; border-radius: 10px; background: #C62828; color: white; font: inherit; font-weight: 700; padding: 11px 18px; cursor: pointer; }
+  .error { min-height: 1.8em; margin-top: 10px; color: #ff8a80; }
+  .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 18px; }
+  figure { background: #171717; border: 1px solid #333; border-radius: 12px; padding: 10px; }
+  figure img { display: block; width: 100%; height: auto; border-radius: 8px; }
+  figcaption { margin-top: 8px; color: #bbb; font-size: 0.88em; text-align: center; }
+  [hidden] { display: none !important; }
   a { color: #D4AF37; }
 </style>
 </head>
 <body>
 
+<section id="access-gate" class="gate" aria-labelledby="gate-title">
+  <div class="card">
+    <span class="badge">只限受邀測試者</span>
+    <h1 id="gate-title">Android Alpha 測試入口</h1>
+    <p>請輸入邀請密碼，解鎖介面預覽、安裝說明及 APK 下載。</p>
+    <form id="access-form">
+      <input type="text" name="username" autocomplete="username" value="invited-tester" hidden>
+      <label for="access-password">測試密碼</label>
+      <input id="access-password" name="password" type="password" autocomplete="current-password" required>
+      <button type="submit">解鎖測試頁</button>
+      <p id="access-error" class="error" role="alert" aria-live="polite"></p>
+    </form>
+    <noscript><p class="error">請啟用 JavaScript 後再輸入測試密碼。</p></noscript>
+  </div>
+</section>
+
+<main id="protected-content" hidden>
 <h1>🤖 Android Alpha 測試版</h1>
 <p><strong>香港大人說明書 (HKAdultManual)</strong></p>
-<span class="badge">公開測試中</span>
+<span class="badge">邀請測試中</span>
 
 <div class="card">
   <p><strong>版本：</strong>0.1.0-alpha.1（build 1）</p>
@@ -32,6 +62,15 @@
   <p>呢個版本用作收集閱讀、搜尋、收藏及相容性意見，可能出現資料重設、當機或介面差異。帳戶、社群及付款功能<strong>尚未啟用</strong>。</p>
   <a class="download" href="https://github.com/Chamotrans/hkadultmanual-privacy/releases/download/android-alpha-0.1.0-1/HKAdultManual-Android-0.1.0-alpha.1.apk">下載 Android APK（371 MB）</a>
   <p class="meta">發佈日期：2026-08-31<br>Source commit：4b8240e516da58810e401b5bfa9cfa96986307d1<br>APK SHA-256：74696919766fd4e38f80a22626198ed70419ebca3f30c66d0775f997acb153fb<br>簽署證書 SHA-256：a113a86a8e334beb8c1e510761cc88a2d196df3bf69938710e3fe9f28f3bfd84<br><a href="https://github.com/Chamotrans/hkadultmanual-privacy/releases/download/android-alpha-0.1.0-1/HKAdultManual-Android-0.1.0-alpha.1-SHA256.txt">下載 SHA-256 檔</a> · <a href="https://github.com/Chamotrans/hkadultmanual-privacy/releases/download/android-alpha-0.1.0-1/HKAdultManual-Android-0.1.0-alpha.1-SIGNATURE.txt">查看簽章報告</a></p>
+</div>
+
+<h2>介面預覽</h2>
+<div class="gallery">
+  <figure><img src="assets/android-alpha/01-explore.png" alt="探索首頁，提供搜尋與文章分類"><figcaption>探索首頁</figcaption></figure>
+  <figure><img src="assets/android-alpha/02-article-list.png" alt="文章列表，顯示分類、標題及閱讀時間"><figcaption>文章列表</figcaption></figure>
+  <figure><img src="assets/android-alpha/03-article-detail.png" alt="文章詳情，提供收藏及標記讀完功能"><figcaption>文章詳情</figcaption></figure>
+  <figure><img src="assets/android-alpha/04-favorites.png" alt="我的收藏頁面"><figcaption>我的收藏</figcaption></figure>
+  <figure><img src="assets/android-alpha/05-settings.png" alt="設定頁，顯示訪客模式、外觀及版本"><figcaption>設定</figcaption></figure>
 </div>
 
 <h2>安裝方法</h2>
@@ -63,5 +102,7 @@
   <li><a href="support.html">支援中心</a></li>
 </ul>
 
+</main>
+<script src="android-alpha-lock.js" defer></script>
 </body>
 </html>
