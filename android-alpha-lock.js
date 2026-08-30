@@ -2,7 +2,7 @@
   "use strict";
 
   const saltHex = "3ac7389e3d5e3606408d6d7f453074d4";
-  const expectedHex = "777f38fa7c25931f5fc0bb58f41b8725e4e8499f91cfff5693706011d6350e93";
+  const expectedHex = "dcb0b2bed28ba3808bcf6caf9665012276223037046e0f4a5b8ce53164cc9e8c";
   const iterations = 210000;
   const sessionKey = "hkadultmanual-alpha-access";
   const memberAccess = "verified-member";
@@ -31,6 +31,9 @@
   const bytesToHex = (bytes) =>
     Array.from(bytes, (byte) => byte.toString(16).padStart(2, "0")).join("");
 
+  const normalizeInviteCode = (value) =>
+    value.normalize("NFKC").toUpperCase().replace(/[^A-Z0-9]/gu, "");
+
   const matches = (left, right) => {
     if (left.length !== right.length) return false;
     let difference = 0;
@@ -58,7 +61,7 @@
     try {
       const keyMaterial = await crypto.subtle.importKey(
         "raw",
-        new TextEncoder().encode(input.value),
+        new TextEncoder().encode(normalizeInviteCode(input.value)),
         "PBKDF2",
         false,
         ["deriveBits"]
