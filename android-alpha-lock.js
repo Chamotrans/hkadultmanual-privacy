@@ -5,12 +5,26 @@
   const expectedHex = "777f38fa7c25931f5fc0bb58f41b8725e4e8499f91cfff5693706011d6350e93";
   const iterations = 210000;
   const sessionKey = "hkadultmanual-alpha-access";
+  const memberAccess = "verified-member";
+  const articleTaskKey = "hkadultmanual-alpha-article-opened";
+  const firebaseAPIKey = "AIzaSyBwTJuH8SfndJd4F_W4ir6Tfz-FVJ2ZKMI";
+  const firebaseProject = "hkadultmanual";
 
   const gate = document.querySelector("#access-gate");
   const content = document.querySelector("#protected-content");
   const form = document.querySelector("#access-form");
   const input = document.querySelector("#access-password");
   const error = document.querySelector("#access-error");
+  const memberForm = document.querySelector("#member-access-form");
+  const memberEmail = document.querySelector("#member-email");
+  const memberPassword = document.querySelector("#member-password");
+  const memberError = document.querySelector("#member-access-error");
+  const taskItems = Object.fromEntries(
+    Array.from(document.querySelectorAll("[data-task]"), (item) => [item.dataset.task, item])
+  );
+  taskItems.article?.querySelector("a")?.addEventListener("click", () => {
+    localStorage.setItem(articleTaskKey, "1");
+  });
 
   const hexToBytes = (hex) =>
     new Uint8Array(hex.match(/.{2}/g).map((byte) => Number.parseInt(byte, 16)));
@@ -33,7 +47,7 @@
     document.title = "香港大人說明書 — Android Alpha";
   };
 
-  if (sessionStorage.getItem(sessionKey) === expectedHex) {
+  if ([expectedHex, memberAccess].includes(sessionStorage.getItem(sessionKey))) {
     showContent();
     return;
   }
@@ -74,6 +88,136 @@
       showContent();
     } catch {
       error.textContent = "瀏覽器無法完成密碼驗證，請更新後再試。";
+    }
+  });
+
+  const firebaseRequest = async (url, options) => {
+    const response = await fetch(url, options);
+    if (!response.ok) throw new Error("firebase-request-failed");
+    return response.json();
+  };
+
+  const markTask = (name, complete) => {
+    taskItems[name]?.classList.toggle("complete", complete);
+  };
+
+  const firestoreQuery = async (idToken, structuredQuery) => {
+    const rows = await firebaseRequest(
+      `https://firestore.googleapis.com/v1/projects/${firebaseProject}/databases/(default)/documents:runQuery`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${idToken}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ structuredQuery })
+      }
+    );
+    return rows.flatMap((row) => row.document ? [row.document] : []);
+  };
+
+  const hasOwnDocument = async (idToken, uid, collectionId) => {
+    const documents = await firestoreQuery(idToken, {
+      from: [{ collectionId }],
+      where: {
+        fieldFilter: {
+          field: { fieldPath: "authorID" },
+          op: "EQUAL",
+          value: { stringValue: uid }
+        }
+      },
+      limit: 1
+    });
+    return documents.length > 0;
+  };
+
+  const hasQuestionComment = async (idToken, uid) => {
+    const comments = await firestoreQuery(idToken, {
+      from: [{ collectionId: "comments", allDescendants: true }],
+      where: {
+        fieldFilter: {
+          field: { fieldPath: "authorID" },
+          op: "EQUAL",
+          value: { stringValue: uid }
+        }
+      },
+      limit: 20
+    });
+    const postIDs = [...new Set(comments.flatMap((comment) => {
+      const match = comment.name?.match(/\/documents\/posts\/([^/]+)\/comments\//u);
+      return match ? [match[1]] : [];
+    }))];
+    const posts = await Promise.all(postIDs.map((postID) => firebaseRequest(
+      `https://firestore.googleapis.com/v1/projects/${firebaseProject}/databases/(default)/documents/posts/${encodeURIComponent(postID)}`,
+      { headers: { Authorization: `Bearer ${idToken}` } }
+    )));
+    return posts.some((post) => post.fields?.type?.stringValue === "question");
+  };
+
+  memberForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    memberError.textContent = "正在核對網站帳戶及任務…";
+
+    try {
+      const signIn = await firebaseRequest(
+        `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${firebaseAPIKey}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: memberEmail.value.trim(),
+            password: memberPassword.value,
+            returnSecureToken: true
+          })
+        }
+      );
+      const account = await firebaseRequest(
+        `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${firebaseAPIKey}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ idToken: signIn.idToken })
+        }
+      );
+      const verified = account.users?.[0]?.emailVerified === true;
+      markTask("account", verified);
+
+      const profile = await firebaseRequest(
+        `https://firestore.googleapis.com/v1/projects/${firebaseProject}/databases/(default)/documents/users/${encodeURIComponent(signIn.localId)}`,
+        { headers: { Authorization: `Bearer ${signIn.idToken}` } }
+      );
+      const article = localStorage.getItem(articleTaskKey) === "1";
+      const [comment, chat] = await Promise.all([
+        hasQuestionComment(signIn.idToken, signIn.localId),
+        hasOwnDocument(signIn.idToken, signIn.localId, "chatMessages")
+      ]);
+      const banned = profile.fields?.isBanned?.booleanValue === true;
+      markTask("article", article);
+      markTask("comment", comment);
+      markTask("chat", chat);
+
+      const missing = [
+        [verified, "完成電郵驗證"],
+        [article, "閱讀一篇文章"],
+        [comment, "喺我要發問留言一次"],
+        [chat, "喺聊天室發言一次"]
+      ].filter(([complete]) => !complete).map(([, label]) => label);
+      if (banned) {
+        memberError.textContent = "帳戶已停用，未能進入測試頁。";
+        return;
+      }
+      if (missing.length) {
+        memberError.textContent = `尚欠：${missing.join("、")}。完成後再按一次核對。`;
+        return;
+      }
+
+      sessionStorage.setItem(sessionKey, memberAccess);
+      memberPassword.value = "";
+      memberError.textContent = "";
+      showContent();
+    } catch {
+      memberPassword.select();
+      memberError.textContent = "未能核對帳戶。請確認電郵、密碼及網絡後再試。";
     }
   });
 })();

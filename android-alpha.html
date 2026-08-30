@@ -25,6 +25,10 @@
   input { width: 100%; border: 1px solid #555; border-radius: 10px; background: #0f0f0f; color: white; font: inherit; padding: 12px 14px; }
   button { margin-top: 14px; border: 0; border-radius: 10px; background: #C62828; color: white; font: inherit; font-weight: 700; padding: 11px 18px; cursor: pointer; }
   .error { min-height: 1.8em; margin-top: 10px; color: #ff8a80; }
+  .divider { border-top: 1px solid #333; margin-top: 24px; padding-top: 18px; }
+  .task-list { margin: 10px 0 16px; }
+  .task-list li.complete { color: #9ccc65; }
+  .task-list li.complete::marker { content: "✓  "; }
   .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 18px; }
   figure { background: #171717; border: 1px solid #333; border-radius: 12px; padding: 10px; }
   figure img { display: block; width: 100%; height: auto; border-radius: 8px; }
@@ -39,7 +43,7 @@
   <div class="card">
     <span class="badge">只限受邀測試者</span>
     <h1 id="gate-title">Android Alpha 測試入口</h1>
-    <p>請輸入邀請密碼，解鎖介面預覽、安裝說明及 APK 下載。</p>
+    <p>有邀請密碼可直接解鎖；冇密碼亦可完成網站體驗任務，再用網站帳戶進入。</p>
     <form id="access-form">
       <input type="text" name="username" autocomplete="username" value="invited-tester" hidden>
       <label for="access-password">測試密碼</label>
@@ -47,6 +51,24 @@
       <button type="submit">解鎖測試頁</button>
       <p id="access-error" class="error" role="alert" aria-live="polite"></p>
     </form>
+    <div class="divider">
+      <h2>冇邀請密碼？</h2>
+      <ol class="task-list" id="member-task-list">
+        <li data-task="account"><a href="https://hkadultmanual.web.app/account" target="_blank" rel="noopener">註冊網站帳戶並完成電郵驗證</a></li>
+        <li data-task="article"><a href="https://hkadultmanual.web.app/articles" target="_blank" rel="noopener">開啟並閱讀第一篇文章</a></li>
+        <li data-task="comment"><a href="https://hkadultmanual.web.app/questions" target="_blank" rel="noopener">喺「嗚啊知識＋／我要發問」留言一次</a></li>
+        <li data-task="chat"><a href="https://hkadultmanual.web.app/chat" target="_blank" rel="noopener">喺聊天室發言一次</a></li>
+      </ol>
+      <p class="meta">完成各項後返回本頁，再用網站帳戶核對。</p>
+      <form id="member-access-form">
+        <label for="member-email">網站帳戶電郵</label>
+        <input id="member-email" name="email" type="email" autocomplete="email" required>
+        <label for="member-password">網站帳戶密碼</label>
+        <input id="member-password" name="password" type="password" autocomplete="current-password" required>
+        <button type="submit">核對任務並解鎖</button>
+        <p id="member-access-error" class="error" role="alert" aria-live="polite"></p>
+      </form>
+    </div>
     <noscript><p class="error">請啟用 JavaScript 後再輸入測試密碼。</p></noscript>
   </div>
 </section>
