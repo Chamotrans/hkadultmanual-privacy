@@ -7,8 +7,7 @@
   const sessionKey = "hkadultmanual-alpha-access";
   const memberAccess = "verified-member";
   const articleTaskKey = "hkadultmanual-alpha-article-opened";
-  const firebaseAPIKey = "AIzaSyBwTJuH8SfndJd4F_W4ir6Tfz-FVJ2ZKMI";
-  const firebaseProject = "hkadultmanual";
+  let firebaseConfigPromise;
 
   const gate = document.querySelector("#access-gate");
   const content = document.querySelector("#protected-content");
@@ -97,13 +96,43 @@
     return response.json();
   };
 
+  const loadFirebaseConfig = () => {
+    if (firebaseConfigPromise) return firebaseConfigPromise;
+
+    firebaseConfigPromise = new Promise((resolve, reject) => {
+      const previousFirebase = window.firebase;
+      const script = document.createElement("script");
+      const cleanup = () => {
+        if (previousFirebase === undefined) delete window.firebase;
+        else window.firebase = previousFirebase;
+        script.remove();
+      };
+
+      window.firebase = {
+        initializeApp(config) {
+          cleanup();
+          resolve(config);
+        }
+      };
+      script.src = "https://hkadultmanual.web.app/__/firebase/init.js";
+      script.async = true;
+      script.onerror = () => {
+        cleanup();
+        reject(new Error("firebase-config-failed"));
+      };
+      document.head.append(script);
+    });
+
+    return firebaseConfigPromise;
+  };
+
   const markTask = (name, complete) => {
     taskItems[name]?.classList.toggle("complete", complete);
   };
 
-  const firestoreQuery = async (idToken, structuredQuery) => {
+  const firestoreQuery = async (idToken, projectId, structuredQuery) => {
     const rows = await firebaseRequest(
-      `https://firestore.googleapis.com/v1/projects/${firebaseProject}/databases/(default)/documents:runQuery`,
+      `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents:runQuery`,
       {
         method: "POST",
         headers: {
@@ -116,8 +145,8 @@
     return rows.flatMap((row) => row.document ? [row.document] : []);
   };
 
-  const hasOwnDocument = async (idToken, uid, collectionId) => {
-    const documents = await firestoreQuery(idToken, {
+  const hasOwnDocument = async (idToken, projectId, uid, collectionId) => {
+    const documents = await firestoreQuery(idToken, projectId, {
       from: [{ collectionId }],
       where: {
         fieldFilter: {
@@ -131,8 +160,8 @@
     return documents.length > 0;
   };
 
-  const hasQuestionComment = async (idToken, uid) => {
-    const comments = await firestoreQuery(idToken, {
+  const hasQuestionComment = async (idToken, projectId, uid) => {
+    const comments = await firestoreQuery(idToken, projectId, {
       from: [{ collectionId: "comments", allDescendants: true }],
       where: {
         fieldFilter: {
@@ -148,7 +177,7 @@
       return match ? [match[1]] : [];
     }))];
     const posts = await Promise.all(postIDs.map((postID) => firebaseRequest(
-      `https://firestore.googleapis.com/v1/projects/${firebaseProject}/databases/(default)/documents/posts/${encodeURIComponent(postID)}`,
+      `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/posts/${encodeURIComponent(postID)}`,
       { headers: { Authorization: `Bearer ${idToken}` } }
     )));
     return posts.some((post) => post.fields?.type?.stringValue === "question");
@@ -159,8 +188,9 @@
     memberError.textContent = "正在核對網站帳戶及任務…";
 
     try {
+      const firebaseConfig = await loadFirebaseConfig();
       const signIn = await firebaseRequest(
-        `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${firebaseAPIKey}`,
+        `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${encodeURIComponent(firebaseConfig.apiKey)}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -172,7 +202,7 @@
         }
       );
       const account = await firebaseRequest(
-        `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${firebaseAPIKey}`,
+        `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${encodeURIComponent(firebaseConfig.apiKey)}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -183,13 +213,13 @@
       markTask("account", verified);
 
       const profile = await firebaseRequest(
-        `https://firestore.googleapis.com/v1/projects/${firebaseProject}/databases/(default)/documents/users/${encodeURIComponent(signIn.localId)}`,
+        `https://firestore.googleapis.com/v1/projects/${firebaseConfig.projectId}/databases/(default)/documents/users/${encodeURIComponent(signIn.localId)}`,
         { headers: { Authorization: `Bearer ${signIn.idToken}` } }
       );
       const article = localStorage.getItem(articleTaskKey) === "1";
       const [comment, chat] = await Promise.all([
-        hasQuestionComment(signIn.idToken, signIn.localId),
-        hasOwnDocument(signIn.idToken, signIn.localId, "chatMessages")
+        hasQuestionComment(signIn.idToken, firebaseConfig.projectId, signIn.localId),
+        hasOwnDocument(signIn.idToken, firebaseConfig.projectId, signIn.localId, "chatMessages")
       ]);
       const banned = profile.fields?.isBanned?.booleanValue === true;
       markTask("article", article);
