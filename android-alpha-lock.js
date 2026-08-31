@@ -22,7 +22,13 @@
     Array.from(document.querySelectorAll("[data-task]"), (item) => [item.dataset.task, item])
   );
   taskItems.article?.querySelector("a")?.addEventListener("click", () => {
-    localStorage.setItem(articleTaskKey, "1");
+    try {
+      localStorage.setItem(articleTaskKey, "1");
+    } catch {
+      // The task can still be checked after sign-in. Some Android browsers
+      // disable storage in private/restricted mode, so this must not break the
+      // rest of the gate.
+    }
   });
 
   const hexToBytes = (hex) =>
@@ -93,10 +99,47 @@
     }
   });
 
-  const firebaseRequest = async (url, options) => {
+  const firebaseRequest = async (url, options = {}) => {
     const response = await fetch(url, options);
-    if (!response.ok) throw new Error("firebase-request-failed");
-    return response.json();
+    const payload = await response.json().catch(() => null);
+    if (!response.ok) {
+      const requestError = new Error(
+        payload?.error?.message || `firebase-http-${response.status}`
+      );
+      requestError.code = payload?.error?.message || "firebase-request-failed";
+      requestError.status = response.status;
+      throw requestError;
+    }
+    return payload;
+  };
+
+  const authenticationMessage = (requestError) => {
+    const code = String(requestError?.code || requestError?.message || "");
+    if (/INVALID_LOGIN_CREDENTIALS|INVALID_PASSWORD|EMAIL_NOT_FOUND/u.test(code)) {
+      return "電郵或密碼不正確。";
+    }
+    if (/USER_DISABLED/u.test(code)) return "帳戶已停用，未能進入測試頁。";
+    if (/TOO_MANY_ATTEMPTS_TRY_LATER|TOO_MANY_REQUESTS/u.test(code)) {
+      return "登入嘗試太多，請稍後再試或先到網站重設密碼。";
+    }
+    return "暫時未能連接帳戶服務，請檢查網絡後再試。";
+  };
+
+  const optionalFirebaseDocument = async (url, options) => {
+    try {
+      return await firebaseRequest(url, options);
+    } catch (requestError) {
+      if (requestError?.status === 404) return null;
+      throw requestError;
+    }
+  };
+
+  const articleTaskComplete = () => {
+    try {
+      return localStorage.getItem(articleTaskKey) === "1";
+    } catch {
+      return false;
+    }
   };
 
   const loadFirebaseConfig = () => {
@@ -179,20 +222,31 @@
       const match = comment.name?.match(/\/documents\/posts\/([^/]+)\/comments\//u);
       return match ? [match[1]] : [];
     }))];
-    const posts = await Promise.all(postIDs.map((postID) => firebaseRequest(
+    const posts = await Promise.allSettled(postIDs.map((postID) => optionalFirebaseDocument(
       `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/posts/${encodeURIComponent(postID)}`,
       { headers: { Authorization: `Bearer ${idToken}` } }
     )));
-    return posts.some((post) => post.fields?.type?.stringValue === "question");
+    if (posts.some((result) =>
+      result.status === "fulfilled"
+      && result.value?.fields?.type?.stringValue === "question"
+    )) return true;
+
+    // Deleted posts can leave orphaned comment subcollections. A missing parent
+    // means the task is incomplete, not that the user's password was wrong.
+    const failed = posts.find((result) => result.status === "rejected");
+    if (failed?.status === "rejected") throw failed.reason;
+    return false;
   };
 
   memberForm.addEventListener("submit", async (event) => {
     event.preventDefault();
     memberError.textContent = "正在核對網站帳戶及任務…";
 
+    let firebaseConfig;
+    let signIn;
     try {
-      const firebaseConfig = await loadFirebaseConfig();
-      const signIn = await firebaseRequest(
+      firebaseConfig = await loadFirebaseConfig();
+      signIn = await firebaseRequest(
         `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${encodeURIComponent(firebaseConfig.apiKey)}`,
         {
           method: "POST",
@@ -204,7 +258,15 @@
           })
         }
       );
-      const account = await firebaseRequest(
+    } catch (requestError) {
+      memberPassword.select();
+      memberError.textContent = authenticationMessage(requestError);
+      return;
+    }
+
+    let account;
+    try {
+      account = await firebaseRequest(
         `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${encodeURIComponent(firebaseConfig.apiKey)}`,
         {
           method: "POST",
@@ -212,45 +274,62 @@
           body: JSON.stringify({ idToken: signIn.idToken })
         }
       );
-      const verified = account.users?.[0]?.emailVerified === true;
-      markTask("account", verified);
+    } catch {
+      memberError.textContent = "帳戶已登入，但暫時未能讀取電郵驗證狀態。請稍後再試。";
+      return;
+    }
 
-      const profile = await firebaseRequest(
+    const verified = account.users?.[0]?.emailVerified === true;
+    markTask("account", verified);
+
+    const checks = await Promise.allSettled([
+      optionalFirebaseDocument(
         `https://firestore.googleapis.com/v1/projects/${firebaseConfig.projectId}/databases/(default)/documents/users/${encodeURIComponent(signIn.localId)}`,
         { headers: { Authorization: `Bearer ${signIn.idToken}` } }
-      );
-      const article = localStorage.getItem(articleTaskKey) === "1";
-      const [comment, chat] = await Promise.all([
-        hasQuestionComment(signIn.idToken, firebaseConfig.projectId, signIn.localId),
-        hasOwnDocument(signIn.idToken, firebaseConfig.projectId, signIn.localId, "chatMessages")
-      ]);
-      const banned = profile.fields?.isBanned?.booleanValue === true;
-      markTask("article", article);
-      markTask("comment", comment);
-      markTask("chat", chat);
-
-      const missing = [
-        [verified, "完成電郵驗證"],
-        [article, "閱讀一篇文章"],
-        [comment, "喺我要發問留言一次"],
-        [chat, "喺聊天室發言一次"]
-      ].filter(([complete]) => !complete).map(([, label]) => label);
-      if (banned) {
-        memberError.textContent = "帳戶已停用，未能進入測試頁。";
-        return;
-      }
-      if (missing.length) {
-        memberError.textContent = `尚欠：${missing.join("、")}。完成後再按一次核對。`;
-        return;
-      }
-
-      sessionStorage.setItem(sessionKey, memberAccess);
-      memberPassword.value = "";
-      memberError.textContent = "";
-      showContent();
-    } catch {
-      memberPassword.select();
-      memberError.textContent = "未能核對帳戶。請確認電郵、密碼及網絡後再試。";
+      ),
+      hasQuestionComment(signIn.idToken, firebaseConfig.projectId, signIn.localId),
+      hasOwnDocument(signIn.idToken, firebaseConfig.projectId, signIn.localId, "chatMessages")
+    ]);
+    const checkLabels = ["帳戶狀態", "知識＋留言", "聊天室發言"];
+    const failedChecks = checks.flatMap((result, index) =>
+      result.status === "rejected" ? [checkLabels[index]] : []
+    );
+    if (failedChecks.length) {
+      memberError.textContent = `帳戶已登入，但暫時未能核對${failedChecks.join("、")}。請稍後再試。`;
+      return;
     }
+
+    const profile = checks[0].status === "fulfilled" ? checks[0].value : null;
+    const comment = checks[1].status === "fulfilled" && checks[1].value;
+    const chat = checks[2].status === "fulfilled" && checks[2].value;
+    const article = articleTaskComplete();
+    const banned = profile?.fields?.isBanned?.booleanValue === true;
+    markTask("article", article);
+    markTask("comment", comment);
+    markTask("chat", chat);
+
+    const missing = [
+      [verified, "完成電郵驗證"],
+      [article, "閱讀一篇文章"],
+      [comment, "喺我要發問留言一次"],
+      [chat, "喺聊天室發言一次"]
+    ].filter(([complete]) => !complete).map(([, label]) => label);
+    if (banned) {
+      memberError.textContent = "帳戶已停用，未能進入測試頁。";
+      return;
+    }
+    if (missing.length) {
+      memberError.textContent = `尚欠：${missing.join("、")}。完成後再按一次核對。`;
+      return;
+    }
+
+    try {
+      sessionStorage.setItem(sessionKey, memberAccess);
+    } catch {
+      // Restricted storage must not block an otherwise valid one-time visit.
+    }
+    memberPassword.value = "";
+    memberError.textContent = "";
+    showContent();
   });
 })();
