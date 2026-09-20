@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>刪除帳戶及資料 — 香港大人說明書</title>
+<style>
+  :root { color-scheme: light dark; }
+  body {
+    max-width: 720px; margin: 0 auto; padding: 32px 20px 80px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang HK",
+                 "Noto Sans HK", "Microsoft JhengHei", sans-serif;
+    line-height: 1.75; color: #1c1c1e; background: #fff;
+  }
+  @media (prefers-color-scheme: dark) { body { color:#f2f2f7; background:#1c1c1e; } a { color:#6fb1ff; } }
+  h1 { font-size: 1.6rem; margin-bottom: .25rem; }
+  h2 { font-size: 1.15rem; margin-top: 2rem; border-bottom: 1px solid #8884; padding-bottom: .3rem; }
+  .sub { color: #6b6b70; margin-top: 0; }
+  ol, ul { padding-left: 1.4rem; }
+  li { margin: .4rem 0; }
+  code { background:#8882; padding:.1rem .35rem; border-radius:4px; }
+  .note { background:#8881; border-left:3px solid #8886; padding:.7rem 1rem; border-radius:4px; margin:1rem 0; }
+</style>
+</head>
+<body>
+
+<h1>刪除帳戶及資料</h1>
+<p class="sub">香港大人說明書（Hong Kong Adult Manual）· 應用程式包名 <code>com.hkadultmanual</code></p>
+
+<p>本頁說明如何要求刪除你在<strong>香港大人說明書</strong>（以下簡稱「本應用程式」）的帳戶及相關資料，由開發者 Sunny Yylai 提供。</p>
+
+<h2>如何刪除你的帳戶</h2>
+<ol>
+  <li>開啟<strong>香港大人說明書</strong>應用程式。</li>
+  <li>前往 <strong>「設定」</strong>（個人檔案頁面內的設定入口）。</li>
+  <li>選擇 <strong>「刪除帳戶及資料」</strong>。</li>
+  <li>確認彈出對話框 <strong>「永久刪除帳戶及所有資料？」</strong>。</li>
+  <li>伺服器會先刪除你的帳戶及相關資料；確認成功後，本機資料亦會一併清除。此操作<strong>不能還原</strong>。</li>
+</ol>
+
+<div class="note">
+如你無法登入應用程式，或希望透過電郵要求刪除，請聯絡
+<a href="mailto:sunnyyylai@icloud.com">sunnyyylai@icloud.com</a>，並註明你帳戶的顯示名稱或 Firebase 用戶識別碼。
+我們會在合理時間內處理。
+</div>
+
+<h2>會刪除的資料</h2>
+<ul>
+  <li>Firebase 身份驗證帳戶（匿名身份及／或已連結的電郵帳戶）</li>
+  <li>個人資料（顯示名稱、簡介、頭像、個人檔案橫額）</li>
+  <li>社群內容（貼文、留言、問題、答案）</li>
+  <li>私人訊息（對話成員關係、訊息正文、已上載的私人媒體）</li>
+  <li>聊天室文字及語音訊息</li>
+  <li>寫手申請、投稿及已刊文章</li>
+  <li>舉報資料、封鎖名單</li>
+  <li>朋友配對設定、每日配對／配對紀錄</li>
+  <li>成就、排行榜及活動積分等私人紀錄</li>
+  <li>伺服器端訂閱驗證及每日解鎖紀錄</li>
+  <li>已上載至 Firebase Storage 的 UGC 相片、語音錄音及個人檔案圖片</li>
+</ul>
+
+<h2>可能保留的資料、原因及期限</h2>
+<ul>
+  <li><strong>最低限度安全紀錄</strong>（刪除操作鎖及匿名墓碑）：用於防止濫用、協調重試、處理競態及防止資料被重建。操作鎖通常於 <strong>24 小時</strong>後首次到期；匿名墓碑不含 Firebase UID、正文、電郵、顯示名稱或媒體路徑。</li>
+  <li><strong>法律及爭議紀錄</strong>：為履行法律責任、處理爭議或維持備份完整性所需的有限紀錄，可能於合理期間內保留。</li>
+  <li><strong>其他用戶已合法取得的副本</strong>：例如截圖或分享內容，不受我們控制，亦未必可由我們刪除。</li>
+</ul>
+
+<h2>聯絡我們</h2>
+<p>電郵：<a href="mailto:sunnyyylai@icloud.com">sunnyyylai@icloud.com</a><br>
+私隱政策：<a href="https://chamotrans.github.io/hkadultmanual-privacy/">https://chamotrans.github.io/hkadultmanual-privacy/</a></p>
+
+<p class="sub" style="margin-top:2.5rem">最後更新：2026 年 9 月 20 日</p>
+
+</body>
+</html>
