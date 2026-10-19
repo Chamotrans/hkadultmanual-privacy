@@ -25,23 +25,23 @@
 <body>
 
 <h1>刪除帳戶及資料</h1>
-<p class="sub">香港大人說明書（Hong Kong Adult Manual）· 應用程式包名 <code>com.hkadultmanual</code></p>
+<p class="sub">香港初級大人說明書（原名：香港大人說明書；Hong Kong Adult Manual）· Android 套件名稱 <code>com.hkadultmanual</code></p>
 
-<p>本頁說明如何要求刪除你在<strong>香港大人說明書</strong>（以下簡稱「本應用程式」）的帳戶及相關資料，由開發者 Sunny Yylai 提供。</p>
+<p>本頁說明如何要求刪除你在<strong>香港初級大人說明書</strong>（以下簡稱「本應用程式」）的帳戶及相關資料。營運者為 Sunny Lai；Google Play 開發者名稱為「柔軟的蝦」。毋須安裝 App 亦可按下方電郵方法提出要求。</p>
 
 <h2>如何刪除你的帳戶</h2>
 <ol>
-  <li>開啟<strong>香港大人說明書</strong>應用程式。</li>
-  <li>前往 <strong>「設定」</strong>（個人檔案頁面內的設定入口）。</li>
-  <li>選擇 <strong>「刪除帳戶及資料」</strong>。</li>
-  <li>確認彈出對話框 <strong>「永久刪除帳戶及所有資料？」</strong>。</li>
-  <li>伺服器會先刪除你的帳戶及相關資料；確認成功後，本機資料亦會一併清除。此操作<strong>不能還原</strong>。</li>
+  <li>開啟<strong>香港初級大人說明書</strong> Android App，確認已登入你希望刪除的帳戶。</li>
+  <li>前往 <strong>「我的 → 設定 → 刪除帳戶及資料」</strong>。較舊版本可先進入設定內的帳戶頁。</li>
+  <li>閱讀說明並進入帳戶管理，選擇 <strong>「永久刪除帳戶及資料」</strong>。</li>
+  <li>閱讀確認對話框，核對帳戶後才按 <strong>「永久刪除」</strong>。</li>
+  <li>伺服器確認刪除完成後，App 會清理相應本機資料。此操作<strong>不能還原</strong>；以下保留例外仍適用。移除 App、登出或清除本機資料不等於刪除伺服器帳戶。</li>
 </ol>
 
 <div class="note">
 如你無法登入應用程式，或希望透過電郵要求刪除，請聯絡
-<a href="mailto:sunnyyylai@icloud.com">sunnyyylai@icloud.com</a>，並註明你帳戶的顯示名稱或 Firebase 用戶識別碼。
-我們會在合理時間內處理。
+<a href="mailto:sunnyyylai@icloud.com?subject=HKAdultManual%20account%20deletion%20request">sunnyyylai@icloud.com</a>，主旨註明「香港初級大人說明書 — 刪除帳戶」，盡可能以 App 帳戶電郵寄出，並註明要求刪除帳戶及相關資料。可提供顯示名稱或 Firebase UID 協助識別，但<strong>不要提供密碼</strong>。
+我們會為保障帳戶核實身份並回覆處理安排；如無法使用帳戶電郵，請說明情況，不必先重新安裝 App。
 </div>
 
 <h2>會刪除的資料</h2>
@@ -55,22 +55,25 @@
   <li>舉報資料、封鎖名單</li>
   <li>朋友配對設定、每日配對／配對紀錄</li>
   <li>成就、排行榜及活動積分等私人紀錄</li>
+  <li>與帳戶連結的生活提醒、租屋筆記及裝置推送登記</li>
   <li>伺服器端訂閱驗證及每日解鎖紀錄</li>
   <li>已上載至 Firebase Storage 的 UGC 相片、語音錄音及個人檔案圖片</li>
 </ul>
 
 <h2>可能保留的資料、原因及期限</h2>
 <ul>
-  <li><strong>最低限度安全紀錄</strong>（刪除操作鎖及匿名墓碑）：用於防止濫用、協調重試、處理競態及防止資料被重建。操作鎖通常於 <strong>24 小時</strong>後首次到期；匿名墓碑不含 Firebase UID、正文、電郵、顯示名稱或媒體路徑。</li>
+  <li><strong>短暫刪除操作鎖</strong>：用於協調重試及處理競態，首次到期時間通常為 <strong>24 小時</strong>後；安全重試可延長，雲端清理可稍後完成。</li>
+  <li><strong>永久 UID 刪除墓碑</strong>：依現行服務私隱政策，不設到期日，保存 Firebase UID、首次刪除操作識別碼、建立／更新時間及格式版本，唯一用途是阻止已刪除身份、舊憑證或延遲事件重建資料。這並非不含 UID 的匿名紀錄；不包含個人檔案、訊息正文、媒體、密碼或登入 token。</li>
   <li><strong>法律及爭議紀錄</strong>：為履行法律責任、處理爭議或維持備份完整性所需的有限紀錄，可能於合理期間內保留。</li>
   <li><strong>其他用戶已合法取得的副本</strong>：例如截圖或分享內容，不受我們控制，亦未必可由我們刪除。</li>
 </ul>
 
 <h2>聯絡我們</h2>
 <p>電郵：<a href="mailto:sunnyyylai@icloud.com">sunnyyylai@icloud.com</a><br>
-私隱政策：<a href="https://chamotrans.github.io/hkadultmanual-privacy/">https://chamotrans.github.io/hkadultmanual-privacy/</a></p>
+Android 私隱政策：<a href="android-privacy.html">Android 私隱政策</a><br>
+其他平台：<a href="https://chamotrans.github.io/hkadultmanual-privacy/">服務私隱政策</a></p>
 
-<p class="sub" style="margin-top:2.5rem">最後更新：2026 年 9 月 20 日</p>
+<p class="sub" style="margin-top:2.5rem">最後更新：2026 年 10 月 18 日</p>
 
 </body>
 </html>
